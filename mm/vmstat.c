@@ -1094,6 +1094,8 @@ const char * const vmstat_text[] = {
 	"nr_vmscan_immediate_reclaim",
 	"nr_dirtied",
 	"nr_written",
+	"nr_ion_heap",
+	"nr_ion_heap_pool",
 	"nr_kernel_misc_reclaimable",
 	"nr_unreclaimable_pages",
 
