@@ -525,6 +525,7 @@ KBUILD_AFLAGS	+= $(CLANG_FLAGS)
 export CLANG_FLAGS
 ifeq ($(ld-name),lld)
 KBUILD_CFLAGS += -fuse-ld=lld
+LDFLAGS += -z norelro
 endif
 KBUILD_CPPFLAGS += -Qunused-arguments
 endif
