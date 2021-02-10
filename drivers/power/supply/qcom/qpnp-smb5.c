@@ -38,6 +38,8 @@
 #define pr_debug pr_err
 #endif
 
+#include <linux/printk_disable_msg.h>
+
 static struct smb_params smb5_pmi632_params = {
 	.fcc			= {
 		.name   = "fast charge current",
