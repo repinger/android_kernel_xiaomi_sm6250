@@ -811,7 +811,7 @@ unlock:
 	mutex_unlock(&chip->die_chan_lock);
 	if (rc >= 0) {
 		*isns_ua = calculate_div2_cp_isns_ua(temp);
-		pr_err("smb1398 master isns = %duA\n", *isns_ua);
+		pr_debug("smb1398 master isns = %duA\n", *isns_ua);
 	}
 
 	return rc;
@@ -1723,7 +1723,7 @@ static int smb1390_get_fastcharge_mode(struct smb1398_chip *chip)
 		pr_err("Couldn't write fastcharge mode:%d\n", rc);
 		return rc;
 	}
-	pr_err("pval.intval: %d\n", pval.intval);
+	pr_debug("pval.intval: %d\n", pval.intval);
 
 	return pval.intval;
 }
@@ -2217,7 +2217,7 @@ static int smb1398_div2_cp_parse_dt(struct smb1398_chip *chip)
 	chip->max_cutoff_soc = 85;
 	of_property_read_u32(chip->dev->of_node, "qcom,max-cutoff-soc",
 			&chip->max_cutoff_soc);
-	pr_err("qcom,max-cutoff-soc:%d \n",
+	pr_debug("qcom,max-cutoff-soc:%d \n",
                                   chip->max_cutoff_soc);
 	chip->ilim_ua_disable_div2_cp_slave = chip->div2_cp_min_ilim_ua * 3;
 	of_property_read_u32(chip->dev->of_node, "qcom,ilim-ua-disable-slave",

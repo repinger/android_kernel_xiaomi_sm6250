@@ -242,7 +242,7 @@ struct smb5 {
 	struct smb_dt_props	dt;
 };
 
-static int __debug_mask = PR_MISC | PR_PARALLEL | PR_OTG | PR_WLS | PR_OEM;
+static int __debug_mask = 0;
 module_param_named(
 	debug_mask, __debug_mask, int, 0600
 );
