@@ -123,7 +123,7 @@ static const char *sde_fence_get_driver_name(struct dma_fence *fence)
 
 	return f->name;
 #else
-	return "sde";
+	return "sde_fence";
 #endif
 }
 
@@ -219,10 +219,6 @@ static int _sde_fence_create_fd(void *fence_ctx, uint32_t val)
 		return -ENOMEM;
 
 	sde_fence->ctx = fence_ctx;
-#ifdef CONFIG_FENCE_DEBUG
-	snprintf(sde_fence->name, SDE_FENCE_NAME_SIZE, "sde_fence:%s:%u",
-						sde_fence->ctx->name, val);
-#endif
 	dma_fence_init(&sde_fence->base, &sde_fence_ops, &ctx->lock,
 		ctx->context, val);
 	kref_get(&ctx->kref);
@@ -231,8 +227,8 @@ static int _sde_fence_create_fd(void *fence_ctx, uint32_t val)
 	fd = get_unused_fd_flags(0);
 	if (fd < 0) {
 #ifdef CONFIG_FENCE_DEBUG
-		SDE_ERROR("failed to get_unused_fd_flags(), %s\n",
-							sde_fence->name);
+		SDE_ERROR("failed to get_unused_fd_flags(), sde_fence:%s:%u\n",
+			  sde_fence->ctx->name, val);
 #endif
 		dma_fence_put(&sde_fence->base);
 		goto exit;
@@ -244,7 +240,8 @@ static int _sde_fence_create_fd(void *fence_ctx, uint32_t val)
 		put_unused_fd(fd);
 		fd = -EINVAL;
 #ifdef CONFIG_FENCE_DEBUG
-		SDE_ERROR("couldn't create fence, %s\n", sde_fence->name);
+		SDE_ERROR("couldn't create fence, sde_fence:%s:%u\n",
+			  sde_fence->ctx->name, val);
 #endif
 		dma_fence_put(&sde_fence->base);
 		goto exit;
