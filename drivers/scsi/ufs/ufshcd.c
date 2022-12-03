@@ -658,24 +658,10 @@ static inline void ufshcd_remove_non_printable(char *val)
 
 #define UFSHCD_MAX_CMD_LOGGING	200
 
-#ifdef CONFIG_TRACEPOINTS
-static inline void ufshcd_add_command_trace(struct ufs_hba *hba,
-			struct ufshcd_cmd_log_entry *entry)
-{
-	if (trace_ufshcd_command_enabled()) {
-		u32 intr = ufshcd_readl(hba, REG_INTERRUPT_STATUS);
-
-		trace_ufshcd_command(dev_name(hba->dev), entry->str, entry->tag,
-				     entry->doorbell, entry->transfer_len, intr,
-				     entry->lba, entry->cmd_id);
-	}
-}
-#else
 static inline void ufshcd_add_command_trace(struct ufs_hba *hba,
 			struct ufshcd_cmd_log_entry *entry)
 {
 }
-#endif
 
 #ifdef CONFIG_SCSI_UFSHCD_CMD_LOGGING
 static void ufshcd_cmd_log_init(struct ufs_hba *hba)
