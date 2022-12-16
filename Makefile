@@ -913,6 +913,7 @@ LDFLAGS		+= --thinlto-cache-dir=.thinlto-cache
 else
 lto-clang-flags	:= -flto
 endif
+LDFLAGS		+= --threads=$(shell nproc --all)
 lto-clang-flags += -fvisibility=default $(call cc-option, -fsplit-lto-unit)
 
 KBUILD_LDFLAGS_MODULE += -T scripts/module-lto.lds
