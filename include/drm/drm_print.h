@@ -73,12 +73,19 @@ struct drm_printer {
 	const char *prefix;
 };
 
-void __drm_printfn_seq_file(struct drm_printer *p, struct va_format *vaf);
-void __drm_printfn_info(struct drm_printer *p, struct va_format *vaf);
-void __drm_printfn_debug(struct drm_printer *p, struct va_format *vaf);
+static inline void __drm_printfn_seq_file(struct drm_printer *p, struct va_format *vaf)
+{
+}
+static inline void __drm_printfn_info(struct drm_printer *p, struct va_format *vaf)
+{
+}
+static inline void __drm_printfn_debug(struct drm_printer *p, struct va_format *vaf)
+{
+}
 
-__printf(2, 3)
-void drm_printf(struct drm_printer *p, const char *f, ...);
+static inline void drm_printf(struct drm_printer *p, const char *f, ...)
+{
+}
 
 
 /**
