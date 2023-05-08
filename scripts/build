@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+set -e
+
+build_dir=/tmp/out
+
+pack_kernel() {
+	local zip_dir=$(pwd)/tools/pack/zip
+	local img_dir=${zip_dir}/../img
+	local kernel_name=kernel-$(git rev-parse --verify --short=7 HEAD)_$(date -I)
+	local push_device_dir=/sdcard
+
+	case $1 in
+		1) # zip
+			mv -f ${build_dir}/arch/arm64/boot/{dtb.img,dtbo.img,Image} ${zip_dir}
+			cd ${zip_dir}
+			if [ -f *.zip ]; then
+				rm -f *.zip
+			fi
+			zip -r9 ${kernel_name}.zip *
+
+			adb push ${kernel_name}.zip ${push_device_dir}
+			adb reboot recovery
+
+			rm -f {dtb.img,dtbo.img,Image}
+			;;
+		2) # img
+			local boot_block=/dev/block/by-name/boot
+			local dtbo_block=/dev/block/by-name/dtbo
+
+			cd ${img_dir}
+			bash unpackimg.sh
+			mv -f ${build_dir}/arch/arm64/boot/dtb.img split_img/boot.img-dtb
+			mv -f ${build_dir}/arch/arm64/boot/Image split_img/boot.img-kernel
+
+			bash repackimg.sh
+			mv -f *-new.img ${kernel_name}.img
+			bash cleanup.sh
+
+			adb push ${kernel_name}.img ${push_device_dir}
+			adb push ${build_dir}/arch/arm64/boot/dtbo.img ${push_device_dir}
+			adb shell su -c dd if=${push_device_dir}/${kernel_name}.img of=${boot_block}
+			adb shell su -c dd if=${push_device_dir}/dtbo.img of=${dtbo_block}
+
+			adb shell su -c rm -frv /data/dalvik-cache/*
+			adb reboot
+
+			rm -f ${kernel_name}.img
+			;;
+	esac
+}
+
+main() {
+	# Compile
+	make O=${build_dir} miatoll_defconfig -j$(nproc --all)
+	time make O=${build_dir} CROSS_COMPILE=aarch64-linux-gnu- \
+		  CROSS_COMPILE_ARM32=arm-none-eabi- \
+		  CC=clang \
+		  LD=ld.lld \
+		  AS=llvm-as \
+		  AR=llvm-ar \
+		  NM=llvm-nm \
+		  STRIP=llvm-strip \
+		  OBJCOPY=llvm-objcopy \
+		  OBJDUMP=llvm-objdump \
+		  -j$(nproc --all)
+
+	case $1 in
+		-i|--img)
+			pack_kernel 2
+			;;
+		-z|--zip)
+			pack_kernel 1
+			;;
+		*)
+			echo "[!] Invalid argument"
+			exit 22
+			;;
+	esac
+	exit 0
+}
+
+clear
+main $1
