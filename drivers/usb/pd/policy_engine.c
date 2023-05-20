@@ -27,6 +27,7 @@
 #include <linux/extcon.h>
 #include <linux/usb/class-dual-role.h>
 #include <linux/usb/usbpd.h>
+#include <linux/printk_disable_msg.h>
 #include "usbpd.h"
 
 enum usbpd_state {

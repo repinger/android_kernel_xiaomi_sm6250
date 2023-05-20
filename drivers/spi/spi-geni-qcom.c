@@ -26,6 +26,7 @@
 #include <linux/msm_gpi.h>
 #include <linux/spi/spi.h>
 #include <linux/spi/spi-geni-qcom.h>
+#include <linux/printk_disable_msg.h>
 #include <soc/qcom/boot_stats.h>
 
 #define SPI_NUM_CHIPSELECT	(4)

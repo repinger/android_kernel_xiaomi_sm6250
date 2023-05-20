@@ -4,6 +4,7 @@
 #include <dsp/q6afe-v2.h>
 #include <linux/syscalls.h>
 #include <linux/fs.h>
+#include <linux/printk_disable_msg.h>
 
 /*Master Control to Bypass the Smartamp TI CAPIv2 module*/
 static int s_tas_smartamp_bypass = 0;

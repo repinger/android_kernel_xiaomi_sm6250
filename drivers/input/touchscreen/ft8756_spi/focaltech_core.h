@@ -67,6 +67,7 @@
 #ifdef CONFIG_PM
 #include <linux/pm_runtime.h>
 #endif
+#include <linux/printk_disable_msg.h>
 
 /*****************************************************************************
 * Private constant and macro definitions using #define

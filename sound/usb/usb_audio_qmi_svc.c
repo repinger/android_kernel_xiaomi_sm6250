@@ -29,6 +29,7 @@
 #include <linux/platform_device.h>
 #include <linux/usb/audio-v3.h>
 #include <linux/ipc_logging.h>
+#include <linux/printk_disable_msg.h>
 
 #include "usbaudio.h"
 #include "card.h"

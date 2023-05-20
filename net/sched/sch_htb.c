@@ -1488,16 +1488,10 @@ static int htb_change_class(struct Qdisc *sch, u32 classid,
 		do_div(quantum, q->rate2quantum);
 		cl->quantum = min_t(u64, quantum, INT_MAX);
 
-		if (!hopt->quantum && cl->quantum < 1000) {
-			pr_warn("HTB: quantum of class %X is small. Consider r2q change.\n",
-				cl->common.classid);
+		if (!hopt->quantum && cl->quantum < 1000)
 			cl->quantum = 1000;
-		}
-		if (!hopt->quantum && cl->quantum > 200000) {
-			pr_warn("HTB: quantum of class %X is big. Consider r2q change.\n",
-				cl->common.classid);
+		if (!hopt->quantum && cl->quantum > 200000)
 			cl->quantum = 200000;
-		}
 		if (hopt->quantum)
 			cl->quantum = hopt->quantum;
 		if ((cl->prio = hopt->prio) >= TC_HTB_NUMPRIO)

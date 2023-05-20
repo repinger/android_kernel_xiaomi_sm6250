@@ -263,12 +263,8 @@ static int msm_ext_disp_update_audio_ops(struct msm_ext_disp *ext_disp,
 	struct msm_ext_disp_init_data *data = NULL;
 
 	ret = msm_ext_disp_get_intf_data(ext_disp, codec, &data);
-	if (ret || !data) {
-		pr_err("Display not found (%s) ctld (%d) stream (%d)\n",
-			msm_ext_disp_name(codec->type),
-			codec->ctrl_id, codec->stream_id);
+	if (ret || !data)
 		goto end;
-	}
 
 	if (ext_disp->ops) {
 		*ext_disp->ops = data->codec_ops;
